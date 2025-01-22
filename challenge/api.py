@@ -1,25 +1,23 @@
+import os
 import fastapi
 from fastapi import HTTPException
-from pydantic import BaseModel
 import pandas as pd
-from typing import List
-import joblib
-import os
 from challenge.model import DelayModel
+from pydantic import BaseModel
+from typing import List
 
-# Inicializar la aplicación FastAPI
 app = fastapi.FastAPI()
 
-# Instanciar el modelo
+# Inicializar el modelo
 model = DelayModel()
+MODEL_PATH = "challenge/xgboost_model.pkl"
 
-# Definir esquema de entrada para predicción
-class PredictionInput(BaseModel):
-    data: List[dict]
+# Cargar el modelo si existe
+if os.path.exists(MODEL_PATH):
+    model.load_model(MODEL_PATH)
+else:
+    raise RuntimeError(f"Agrega un modelo entrenado en {MODEL_PATH}")
 
-# Definir esquema de salida para predicción
-class PredictionResponse(BaseModel):
-    predictions: List[int]
 
 @app.get("/health", status_code=200)
 async def get_health() -> dict:
@@ -28,64 +26,35 @@ async def get_health() -> dict:
     """
     return {"status": "OK"}
 
-@app.post("/train", status_code=200)
-async def post_train() -> dict:
+
+class PredictionRequest(BaseModel):
+    data: List[dict]
+
+
+@app.post("/predict", status_code=200)
+async def post_predict(request: PredictionRequest) -> dict:
     """
-    Entrena el modelo con los datos disponibles y guarda el modelo en Google Cloud Storage.
-    """
-    try:
-        # Cargar y preprocesar los datos
-        data = model.load_data("data/data.csv")
-        features, target = model.preprocess(data, target_column="delay")
-
-        # Entrenar el modelo
-        report = model.fit(features, target)
-
-        # Guardar el modelo entrenado localmente
-        joblib.dump(model._model, "model.pkl")
-
-        # Subir a GCS si está configurado
-        if "GCS_BUCKET" in os.environ:
-            from google.cloud import storage
-            client = storage.Client()
-            bucket = client.bucket(os.environ["GCS_BUCKET"])
-            blob = bucket.blob("model.pkl")
-            blob.upload_from_filename("model.pkl")
-
-        return {"message": "Modelo entrenado y guardado exitosamente", "report": report}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error en entrenamiento: {str(e)}")
-
-@app.post("/predict", status_code=200, response_model=PredictionResponse)
-async def post_predict(input_data: PredictionInput) -> PredictionResponse:
-    """
-    Realiza predicciones basadas en los datos de entrada proporcionados.
+    Endpoint para realizar predicciones sobre los datos proporcionados.
     """
     try:
-        # Convertir datos de entrada a DataFrame
-        df = pd.DataFrame(input_data.data)
+        # Convertir datos de entrada en un DataFrame de pandas
+        input_data = pd.DataFrame(request.data)
 
-        # Preprocesamiento para predicción
-        features = model.preprocess(df)
+        # Preprocesamiento de datos
+        processed_features = model.preprocess(input_data)
 
-        # Verificar si el modelo está disponible, cargar desde GCS si es necesario
-        if model._model is None and os.path.exists("model.pkl"):
-            model._model = joblib.load("model.pkl")
-        elif model._model is None and "GCS_BUCKET" in os.environ:
-            from google.cloud import storage
-            client = storage.Client()
-            bucket = client.bucket(os.environ["GCS_BUCKET"])
-            blob = bucket.blob("model.pkl")
-            blob.download_to_filename("model.pkl")
-            model._model = joblib.load("model.pkl")
+        # Realizar predicción con el modelo
+        predictions = model.predict(processed_features)
 
-        # Realizar predicciones
-        predictions = model.predict(features)
-
-        return PredictionResponse(predictions=predictions)
+        return {"predictions": predictions}
 
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=f"Error de predicción: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error en la predicción: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
+
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8080))
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=port)

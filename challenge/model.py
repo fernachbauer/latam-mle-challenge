@@ -5,6 +5,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from typing import List, Tuple
 from challenge.preprocessing import get_period_day, is_high_season, get_min_diff, FEATURES_COLS, TARGET_COL
+import os
+import joblib
+
 
 class DelayModel:
     def __init__(self, random_state: int = 1, learning_rate: float = 0.01):
@@ -72,7 +75,7 @@ class DelayModel:
 
     def fit(self, features: pd.DataFrame, target: pd.DataFrame, test_size: float = 0.33):
         """
-        Divide los datos en entrenamiento y prueba, y entrena el modelo.
+        Divide los datos en entrenamiento y prueba, entrena el modelo y lo guarda en un archivo .pkl.
 
         :param features: DataFrame con las características.
         :param target: DataFrame con la variable objetivo.
@@ -81,14 +84,16 @@ class DelayModel:
         """
         try:
             # División de datos en conjunto de entrenamiento y prueba
-            x_train, x_test, y_train, y_test = train_test_split(features, target, test_size=test_size, random_state=42)
+            x_train, x_test, y_train, y_test = train_test_split(
+                features, target, test_size=test_size, random_state=42
+            )
 
             # Calcular el balance de clases
             n_y0 = len(y_train[y_train['delay'] == 0])
             n_y1 = len(y_train[y_train['delay'] == 1])
             self.scale_pos_weight = n_y0 / n_y1
 
-            # Entrenamiento del modelo
+            # Entrenamiento del modelo XGBoost con hiperparámetros definidos
             self._model = xgb.XGBClassifier(
                 random_state=self.random_state,
                 learning_rate=self.learning_rate,
@@ -96,7 +101,11 @@ class DelayModel:
             )
             self._model.fit(x_train, y_train)
 
-            self.is_trained = True  # Model is trained
+            # Guardar el modelo entrenado
+            self.save_model("challenge/xgboost_model.pkl")
+
+            self.is_trained = True  # Actualizar flag de entrenamiento
+            print("Modelo entrenado y guardado exitosamente.")
 
             # Evaluación del modelo
             report = classification_report(y_test, self._model.predict(x_test), output_dict=True)
@@ -104,6 +113,32 @@ class DelayModel:
 
         except Exception as e:
             raise ValueError(f"Error en fit: {e}")
+
+    def save_model(self, filepath: str):
+        """
+        Guarda el modelo entrenado en un archivo .pkl.
+
+        :param filepath: Ruta donde se guardará el modelo.
+        """
+        if self._model:
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            joblib.dump(self._model, filepath)
+            print(f"Modelo guardado en {filepath}")
+        else:
+            raise ValueError("El modelo no ha sido entrenado aún.")
+
+    def load_model(self, filepath: str):
+        """
+        Carga el modelo entrenado desde un archivo .pkl.
+
+        :param filepath: Ruta del archivo .pkl del modelo entrenado.
+        """
+        if os.path.exists(filepath):
+            self._model = joblib.load(filepath)
+            self.is_trained = True  # Marcar el modelo como entrenado
+            print(f"Modelo cargado desde {filepath}")
+        else:
+            raise FileNotFoundError(f"No se encontró el archivo del modelo en {filepath}")
 
     def predict(self, features: pd.DataFrame) -> List[int]:
         """
