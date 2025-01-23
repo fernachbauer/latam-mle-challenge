@@ -1,7 +1,3 @@
-Aquí tienes un informe detallado para la entrega del challenge en formato **Markdown**, con un enfoque humanizado y creativo, utilizando **emojis** para hacerlo más atractivo.
-
----
-
 # 🚀 Desafío Software Engineer (ML & LLMs) - Entrega Final
 
 ¡Hola equipo! 👋  
@@ -166,9 +162,76 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
 ![Despliegue Cloud Run](https://github.com/fernachbauer/latam-mle-challenge/actions/workflows/cd.yml)
 
 ### ✅ API funcionando en producción
+https://latam-api-700756977721.us-central1.run.Aquí tienes un apartado en formato Markdown que puedes agregar a tu documentación para describir cómo realizar consultas a la API del modelo utilizando curl:
+
+## Consumo de la API del Modelo
+
+Para interactuar con la API del modelo de predicción, puedes utilizar la herramienta `curl` para enviar solicitudes HTTP. A continuación, se proporciona un ejemplo de cómo realizar una consulta `POST` a la API para obtener una predicción.
+
+### Endpoint de la API
+
+La API está desplegada en la siguiente URL:
+
 https://latam-api-700756977721.us-central1.run.app
 
----
+### Formato de la solicitud
+
+Se debe realizar una solicitud `POST` al endpoint `/predict` con los datos de vuelo en formato JSON. La estructura del JSON debe incluir las siguientes columnas requeridas:
+
+| Campo    | Tipo  | Descripción                          | Ejemplo                   |
+|----------|-------|--------------------------------------|---------------------------|
+| OPERA    | String| Nombre de la aerolínea               | "Aerolineas Argentinas"    |
+| TIPOVUELO| String| Tipo de vuelo ("N" o "I")             | "N"                        |
+| MES      | Int   | Mes del vuelo (1-12)                  | 3                          |
+| Fecha-I  | String| Fecha y hora inicial del vuelo        | "2025-01-01 00:00:00"      |
+| Fecha-O  | String| Fecha y hora programada del vuelo     | "2025-01-01 02:00:00"      |
+| SIGLAORI | String| Código del aeropuerto de origen       | "SCL"                      |
+| SIGLADES | String| Código del aeropuerto de destino      | "EZE"                      |
+| DIANOM   | String| Día de la semana                      | "Lunes"                    |
+| Vlo-I    | String| Código del vuelo                      | "AR1234"                    |
+| Emp-I    | String| Código de la empresa operadora        | "AR"                        |
+
+### Ejemplo de consulta con `curl`
+
+```bash
+curl -X POST "https://latam-api-700756977721.us-central1.run.app/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "flights": [
+               {
+                   "OPERA": "Aerolineas Argentinas",
+                   "TIPOVUELO": "N",
+                   "MES": 3,
+                   "Fecha-I": "2025-01-01 00:00:00",
+                   "Fecha-O": "2025-01-01 02:00:00",
+                   "SIGLAORI": "SCL",
+                   "SIGLADES": "EZE",
+                   "DIANOM": "Lunes",
+                   "Vlo-I": "AR1234",
+                   "Emp-I": "AR"
+               }
+           ]
+       }'
+
+Respuesta esperada
+
+Si la solicitud es exitosa, la API devolverá una respuesta en formato JSON similar a la siguiente:
+
+{
+   "predict": [0.2]
+}
+
+En caso de errores, como datos faltantes o mal formateados, se recibirá una respuesta HTTP 422 con detalles del problema:
+
+{
+   "detail": "Faltan columnas: ['Fecha-O']"
+}
+
+Pruebas adicionales
+
+Se recomienda utilizar herramientas como Postman para realizar pruebas adicionales, o incluir el script de prueba automatizado en el flujo de CI/CD para verificar la disponibilidad y precisión de la API.
+
+Puedes agregar este apartado al documento para proporcionar instrucciones claras sobre el consumo de la API y facilitar su uso a otros desarrolladores o testers.
 
 ## 🏁 Conclusión
 
