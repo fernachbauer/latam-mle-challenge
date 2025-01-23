@@ -62,6 +62,7 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    - Endpoints implementados:
      - `/predict`: Predicción de retraso de vuelo.
      - `/health`: Chequeo del estado del servicio.
+![image](https://github.com/user-attachments/assets/2837a1f0-2001-4361-b589-41d4ab8da76b)
 
 2. **Pruebas unitarias de la API:**  
    Ejecutando:
@@ -69,6 +70,8 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    ```bash
    make api-test
    ```
+![image](https://github.com/user-attachments/assets/f75d410e-4526-48c8-8870-b04ca1049ab3)
+
 
    **Resultado esperado:** ✅ API funcionando correctamente sin errores.
 
@@ -134,6 +137,8 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    ```
 
    **Resultado esperado:** ✅ API funcionando correctamente bajo carga.
+   
+![image](https://github.com/user-attachments/assets/32dca277-4493-4dcc-bcaf-69c32b9010af)
 
 ---
 
@@ -190,25 +195,11 @@ curl -X POST https://advana-challenge-check-api-cr-k4hdbggvoq-uc.a.run.app/softw
      -H "Content-Type: application/json" \
      -d '{
            "name": "Fernando Nachbauer",
-           "mail": "fernando.nachbauer@example.com",
+           "mail": "fernachbauer@gmail.com",
            "github_url": "https://github.com/fernachbauer/latam-mle-challenge.git",
-           "api_url": "https://test-service-abc123-uc.a.run.app"
+           "api_url": "https://latam-api-700756977721.us-central1.run.app"
          }'
 ```
 
-**Resultado esperado:**
-
-```json
-{
-  "status": "OK",
-  "detail": "your request was received"
-}
-```
-
----
 
 ¡Gracias por la oportunidad de participar en este desafío! 🎉 Si tienen alguna pregunta, estaré encantado de responder. 🤓
-
----
-
-Espero que este documento cubra todos los puntos clave de la entrega. ¡Buena suerte! 🚀
