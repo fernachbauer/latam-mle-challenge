@@ -1,4 +1,4 @@
-name: 'Countinuous Delivery'
+name: 'Continuous Delivery'
 
 on:
   push:
@@ -26,3 +26,4 @@ jobs:
           --region=us-central1 \
           --service-account=latam-mle-project@latam-mle-project.iam.gserviceaccount.com \
           --allow-unauthenticated
+
