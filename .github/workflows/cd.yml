@@ -20,7 +20,7 @@ jobs:
 
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy test-service \
+        gcloud run deploy latam-api \
           --image=gcr.io/latam-mle-project/latam-api \
           --platform=managed \
           --region=us-central1 \
