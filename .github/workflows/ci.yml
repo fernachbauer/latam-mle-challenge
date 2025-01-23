@@ -49,8 +49,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t gcr.io/latam-mle-project/test-image .
+        docker build -t gcr.io/latam-mle-project/latam-api .
 
     - name: Push Docker image to GCR
       run: |
-        docker push gcr.io/latam-mle-project/test-image
+        docker push gcr.io/latam-mle-project/latam-api
