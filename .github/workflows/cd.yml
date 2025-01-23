@@ -21,9 +21,11 @@ jobs:
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy test-service \
-          --image=gcr.io/latam-mle-project/test-image \
+          --image=gcr.io/latam-mle-project/latam-api \
           --platform=managed \
           --region=us-central1 \
           --service-account=latam-mle-project@latam-mle-project.iam.gserviceaccount.com \
           --allow-unauthenticated
+
+
 
