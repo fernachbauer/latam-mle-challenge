@@ -27,6 +27,29 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
 4. **Implementación de CI/CD con GitHub Actions** 🤖
 
 ---
+## Tecnologías Utilizadas
+
+El desarrollo del proyecto se basó en diversas tecnologías para garantizar su correcto funcionamiento:
+
+- **Lenguajes de programación:**
+  - Python 3.11
+  - Jupyter Notebooks
+
+- **Frameworks y librerías:**
+  - FastAPI (para la construcción de la API)
+  - Pytest (para las pruebas unitarias y de integración)
+  - Locust (para pruebas de carga)
+  - Pandas, NumPy, Scikit-learn, XGBoost (para procesamiento y entrenamiento del modelo)
+
+- **Herramientas de DevOps y CI/CD:**
+  - GitHub Actions (para integración y despliegue continuo)
+  - Docker (contenedorización de la aplicación)
+  - Google Cloud Platform (GCP):
+    - Cloud Run (despliegue de la API)
+    - Cloud Storage (almacenamiento de artefactos del modelo)
+    - Artifact Registry (almacenamiento de imágenes de Docker)
+
+---
 
 ## 📊 Parte 1: Transcripción del modelo
 
@@ -46,13 +69,110 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    make model-test
    ```
 
-   **Resultado esperado:** ✅ Todas las pruebas pasaron exitosamente.
+   **Resultados:**
+
+   ✅ Todas las pruebas pasaron exitosamente.
+
+1. **Preprocesamiento de los datos:** 
+    - Se ajustaron los datos de entrada para cumplir con los requisitos del modelo.
+    - Problemas encontrados: errores en la limpieza de datos y formatos incorrectos de fechas.
+
+2. **Entrenamiento del modelo:** 
+    - Se probaron varios modelos, seleccionando finalmente **XGBoost**, ya que presentó el mejor balance entre precisión y sensibilidad en la predicción de atrasos.
+
+3. **Evaluación del modelo:** 
+    - La métrica más relevante para el negocio se definió como **recall**, para minimizar los falsos negativos.
+
+**Principales dificultades:**
+- Problemas de sintaxis en los gráficos de Jupyter Notebooks que se corrigieron manualmente.
+- Ajuste de hiperparámetros para mejorar la precisión sin comprometer el rendimiento.
 
 ---
 
 ## 🌐 Parte 2: Implementación de la API con FastAPI
 
 ### ✔️ Actividades realizadas
+# Documentación del Proyecto de Predicción de Atrasos de Vuelos - LATAM Airlines
+
+## Introducción
+
+Este proyecto tiene como objetivo desarrollar, probar y desplegar un modelo de predicción de atrasos de vuelos para LATAM Airlines, utilizando diversas herramientas y servicios en la nube para garantizar su escalabilidad y operatividad. A través del desarrollo de la API, pruebas de carga y su despliegue en Google Cloud Platform (GCP), se busca proporcionar una solución robusta y eficiente para predecir posibles retrasos en los vuelos, facilitando la toma de decisiones operativas.
+
+---
+
+## Tecnologías Utilizadas
+
+El desarrollo del proyecto se basó en diversas tecnologías para garantizar su correcto funcionamiento:
+
+- **Lenguajes de programación:**
+  - Python 3.11
+  - Jupyter Notebooks
+
+- **Frameworks y librerías:**
+  - FastAPI (para la construcción de la API)
+  - Pytest (para las pruebas unitarias y de integración)
+  - Locust (para pruebas de carga)
+  - Pandas, NumPy, Scikit-learn, XGBoost (para procesamiento y entrenamiento del modelo)
+
+- **Herramientas de DevOps y CI/CD:**
+  - GitHub Actions (para integración y despliegue continuo)
+  - Docker (contenedorización de la aplicación)
+  - Google Cloud Platform (GCP):
+    - Cloud Run (despliegue de la API)
+    - Cloud Storage (almacenamiento de artefactos del modelo)
+    - Artifact Registry (almacenamiento de imágenes de Docker)
+
+---
+
+## Descripción del Proyecto
+
+El proyecto se dividió en varias partes clave:
+
+### **Parte 1: Desarrollo del Modelo de Predicción**
+
+1. **Preprocesamiento de los datos:** 
+    - Se ajustaron los datos de entrada para cumplir con los requisitos del modelo.
+    - Problemas encontrados: errores en la limpieza de datos y formatos incorrectos de fechas.
+
+2. **Entrenamiento del modelo:** 
+    - Se probaron varios modelos, seleccionando finalmente **XGBoost**, ya que presentó el mejor balance entre precisión y sensibilidad en la predicción de atrasos.
+
+3. **Evaluación del modelo:** 
+    - La métrica más relevante para el negocio se definió como **recall**, para minimizar los falsos negativos.
+
+**Principales dificultades:**
+- Problemas de sintaxis en los gráficos de Jupyter Notebooks que se corrigieron manualmente.
+- Ajuste de hiperparámetros para mejorar la precisión sin comprometer el rendimiento.
+
+---
+
+### **Parte 2: Construcción de la API con FastAPI**
+
+Se implementó una API REST utilizando FastAPI que incluye los siguientes endpoints:
+
+| Método  | Endpoint    | Descripción                                |
+|---------|-------------|--------------------------------------------|
+| `GET`   | `/health`    | Verifica el estado de la API               |
+| `POST`  | `/predict`   | Recibe datos de vuelos y devuelve predicciones |
+
+**Formato de solicitud esperado:**
+```json
+{
+    "flights": [
+        {
+            "OPERA": "Aerolineas Argentinas",
+            "TIPOVUELO": "N",
+            "MES": 3,
+            "Fecha-I": "2025-01-01 00:00:00",
+            "Fecha-O": "2025-01-01 02:00:00",
+            "SIGLAORI": "SCL",
+            "SIGLADES": "EZE",
+            "DIANOM": "Lunes",
+            "Vlo-I": "AR1234",
+            "Emp-I": "AR"
+        }
+    ]
+}
 
 1. **Creación de la API en `api.py`:**  
    - Endpoints implementados:
@@ -83,13 +203,24 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    ```bash
    curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"Fecha-I":"2023-12-15 10:00","Vlo-I":"LA123","Ori-I":"SCL","Des-I":"LIM","Emp-I":"LATAM"}'
    ```
+# **Principales dificultades:**
 
+Ajuste de dependencias en requirements.txt debido a incompatibilidades con versiones de Python.
+Faltaban validaciones en los datos de entrada, lo que generaba errores de API.
+Se tuvo que completar las pruebas de validación para cubrir todas las casuísticas posibles.
 
 ---
 
 ## ☁️ Parte 3: Despliegue en Google Cloud
 
 ### ✔️ Actividades realizadas
+
+Se realizaron pruebas de carga utilizando Locust para validar la escalabilidad de la API con 100 usuarios concurrentes. Los resultados mostraron:
+
+Peticiones exitosas: 100%
+Tiempo de respuesta promedio: 1128 ms
+Máximo tiempo de respuesta: 9342 ms
+Usuarios concurrentes: 100
 
 1. **Creación del contenedor Docker:**  
    Se creó una imagen de Docker optimizada:
@@ -126,6 +257,11 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    ```bash
    make stress-test
    ```
+   
+# **Principales dificultades:**
+
+Configuración de variables de entorno para la ejecución de las pruebas.
+Identificación de latencias inesperadas debido a la carga del servidor.
 
    **Resultado esperado:** ✅ API funcionando correctamente bajo carga.
    
@@ -162,7 +298,13 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
 ![Despliegue Cloud Run](https://github.com/fernachbauer/latam-mle-challenge/actions/workflows/cd.yml)
 
 ### ✅ API funcionando en producción
-https://latam-api-700756977721.us-central1.run.Aquí tienes un apartado en formato Markdown que puedes agregar a tu documentación para describir cómo realizar consultas a la API del modelo utilizando curl:
+https://latam-api-700756977721.us-central1.run.
+
+## **Principales desafíos:**
+
+Configuración de permisos para la cuenta de servicio.
+Problemas con la subida de imágenes a Google Artifact Registry.
+Se tuvo que mejorar la configuración de memoria y CPU en Cloud Run para manejar la carga de trabajo esperada.
 
 ## Consumo de la API del Modelo
 
@@ -212,13 +354,13 @@ curl -X POST "https://latam-api-700756977721.us-central1.run.app/predict" \
                }
            ]
        }'
-
+```
 Respuesta esperada
 
 Si la solicitud es exitosa, la API devolverá una respuesta en formato JSON similar a la siguiente:
 
 {
-   "predict": [0.2]
+   "predict": [0]
 }
 
 En caso de errores, como datos faltantes o mal formateados, se recibirá una respuesta HTTP 422 con detalles del problema:
@@ -233,7 +375,27 @@ Se recomienda utilizar herramientas como Postman para realizar pruebas adicional
 
 Puedes agregar este apartado al documento para proporcionar instrucciones claras sobre el consumo de la API y facilitar su uso a otros desarrolladores o testers.
 
-## 🏁 Conclusión
+## 🏁 Conclusines.
+
+### **Principales Hallazgos y Retos Superados**
+
+**Problemas con dependencias y compatibilidad:**
+
+* Se detectaron múltiples conflictos entre versiones de librerías y Python.
+* Se crearon entornos virtuales específicos para cada parte del proyecto.
+* Desafíos en el modelo de machine learning:
+
+* Ajuste fino de los parámetros del modelo para obtener un balance entre precisión y recall.
+* Adaptación de pruebas de validación para que el modelo respondiera según las expectativas del negocio.
+
+**Problemas con GitHub y despliegue:**
+
+- Fallos recurrentes al realizar git push debido a límites de tamaño y errores de autenticación.
+- Se migró a SSH para mejorar la conectividad y autenticación segura.
+
+**Despliegue manual vs automatizado:**
+
+Se propone la implementación de Terraform para una gestión más eficiente, pero debido a limitaciones de tiempo se optó por despliegues manuales utilizando GCP CLI.
 
 Este desafío ha permitido demostrar la capacidad de:
 
@@ -243,6 +405,23 @@ Este desafío ha permitido demostrar la capacidad de:
 - 🔹 Automatizar flujos de CI/CD con GitHub Actions.
 
 ---
+# **Propuesta de Uso para LATAM Airlines**
+
+El modelo de predicción de atrasos puede ser utilizado por LATAM Airlines en el Aeropuerto de Santiago para:
+
+**Optimización de operaciones:** Planificación de vuelos con base en predicciones de atrasos, reduciendo tiempos de espera y optimizando el uso de recursos.
+**Comunicación con pasajeros:** Proporcionar información anticipada sobre posibles retrasos, mejorando la experiencia del cliente.
+**Gestión de tripulación:** Ajustar turnos y descansos de la tripulación en función de los tiempos estimados de retraso.
+Análisis de patrones: Identificación de factores recurrentes que afectan la puntualidad, como condiciones meteorológicas o congestión del aeropuerto.
+
+## Comentarios Finales:
+Este desafío ha sido una excelente oportunidad para poner a prueba las habilidades prácticas de un **Ingeniero de Machine Learning** con experiencia, ya que abarca todo el ciclo de vida de un modelo, desde la concepción hasta su despliegue en producción. A lo largo de este proceso, se enfrentaron diversos retos técnicos que van más allá del simple entrenamiento de un modelo, demostrando que el verdadero valor de un ML Engineer radica en su capacidad para integrar múltiples disciplinas, gestionar problemas inesperados y garantizar la operatividad del sistema en entornos reales.
+
+Uno de los mayores aprendizajes de este desafío es la importancia de la **adaptabilidad y el pensamiento crítico**, dado que el despliegue de modelos de Machine Learning en entornos productivos rara vez ocurre sin contratiempos. Se presentaron desafíos relacionados con la compatibilidad de dependencias, la **optimización del modelo para un entorno de producción con recursos limitados**, la automatización del proceso de integración y despliegue continuo (CI/CD), y la **gestión eficiente de la infraestructura en la nube**. Superar estos obstáculos requirió no solo habilidades técnicas avanzadas, sino también una comprensión profunda de los procesos operativos y la capacidad de tomar decisiones informadas bajo presión.
+
+Además, este ejercicio ha resaltado la importancia de la **colaboración y la comunicación entre equipos multidisciplinarios**. Un modelo de Machine Learning exitoso no solo debe ofrecer buenas métricas de precisión, sino que también debe alinearse con los objetivos del negocio, integrarse adecuadamente en los sistemas existentes y ser fácilmente operable por los stakeholders. La documentación clara, el versionado adecuado del código, y la **implementación de buenas prácticas de MLOps** son aspectos clave que garantizan la mantenibilidad y escalabilidad de la solución.
+
+Finalmente, el desafío refuerza la idea de que el rol del Ingeniero de Machine Learning no termina cuando el modelo está entrenado, sino que apenas comienza. La **capacidad de desplegar, monitorear y mejorar continuamente el modelo** en respuesta a cambios en los datos y las necesidades del negocio es lo que realmente diferencia a un profesional experimentado en el campo. Este tipo de retos proporcionan una **comprensión holística del proceso de producción de modelos de Machine Learning**, preparando al ingeniero para enfrentar escenarios complejos del mundo real con confianza y eficiencia.
 
 ## 🚀 Envío del desafío
 
@@ -261,3 +440,8 @@ curl -X POST https://advana-challenge-check-api-cr-k4hdbggvoq-uc.a.run.app/softw
 
 
 ¡Gracias por la oportunidad de participar en este desafío! 🎉 Si tienen alguna pregunta, estaré encantado de responder. 🤓
+░░░░░░░░▒▒▒▒▒░░░░░▄█░░
+▒▒─▄▄▄▄▄▄▄▄▄▄▄▄▄▄███▄░
+░▄█▄██▄█▄█▄█▄█▄██▀▀▒░░
+░▒▒▒▒░░▀▀████▄─░░░▒▒▒░
+▒▒▒▒▒▒▒▒▒▒▒▀▀██▄▒▒▒▒▒▒
