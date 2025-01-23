@@ -88,11 +88,6 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"Fecha-I":"2023-12-15 10:00","Vlo-I":"LA123","Ori-I":"SCL","Des-I":"LIM","Emp-I":"LATAM"}'
    ```
 
-   **Respuesta esperada:**
-
-   ```json
-   {"delay_probability": 0.75}
-   ```
 
 ---
 
@@ -127,7 +122,7 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
    Se actualizó la línea 26 con la URL de la API desplegada:
 
    ```makefile
-   API_URL = https://test-service-abc123-uc.a.run.app
+   API_URL = https://latam-api-700756977721.us-central1.run.app
    ```
 
 5. **Pruebas de estrés:**  
@@ -164,14 +159,14 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
 
 ## 📸 Evidencias
 
-### 🏁 Pruebas unitarias exitosas (Parte 1 y 2)
+### 🏁 Pruebas unitarias incorporadas al flujo (Parte 1 y 2)
 ![Pruebas Unitarias](https://github.com/fernachbauer/latam-mle-challenge/actions/workflows/ci.yml)
 
 ### ☁️ Despliegue en Google Cloud Run (Parte 3)
 ![Despliegue Cloud Run](https://github.com/fernachbauer/latam-mle-challenge/actions/workflows/cd.yml)
 
 ### ✅ API funcionando en producción
-[https://test-service-abc123-uc.a.run.app/docs](https://test-service-abc123-uc.a.run.app/docs)
+https://latam-api-700756977721.us-central1.run.app
 
 ---
 
