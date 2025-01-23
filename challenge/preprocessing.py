@@ -19,15 +19,21 @@ FEATURES_COLS = [
 # Nombre de la columna objetivo
 TARGET_COL = "delay"
 
-def get_period_day(date: str) -> str:
+def get_period_day(date) -> str:
     """
     Determina el periodo del día en función de la hora de un vuelo.
-    
-    :param date: Fecha en formato string 'YYYY-MM-DD HH:MM:SS'
+
+    :param date: Fecha en formato string 'YYYY-MM-DD HH:MM:SS' o Timestamp.
     :return: Periodo del día ('mañana', 'tarde', 'noche')
     """
     try:
+        # Convertir a cadena si es Timestamp
+        if not isinstance(date, str):
+            date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+        # Intentar parsear en el formato esperado
         date_time = datetime.strptime(date, '%Y-%m-%d %H:%M:%S').time()
+
         morning_min = datetime.strptime("05:00", '%H:%M').time()
         morning_max = datetime.strptime("11:59", '%H:%M').time()
         afternoon_min = datetime.strptime("12:00", '%H:%M').time()
@@ -39,6 +45,8 @@ def get_period_day(date: str) -> str:
             return 'tarde'
         else:
             return 'noche'
+    except ValueError as ve:
+        raise ValueError(f"Error en get_period_day: formato de fecha inválido ({date}). Use 'YYYY-MM-DD HH:MM:SS'. Error: {ve}")
     except Exception as e:
         raise ValueError(f"Error en get_period_day: {e}")
 
@@ -81,3 +89,4 @@ def get_min_diff(row) -> float:
         return (fecha_o - fecha_i).total_seconds() / 60
     except Exception as e:
         raise ValueError(f"Error en get_min_diff: {e}")
+
