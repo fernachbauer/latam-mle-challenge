@@ -121,6 +121,7 @@ Se implementó una API REST utilizando FastAPI que incluye los siguientes endpoi
         }
     ]
 }
+```
 
 1. **Creación de la API en `api.py`:**  
    - Endpoints implementados:
