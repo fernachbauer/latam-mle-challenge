@@ -27,7 +27,7 @@ En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning 
 4. **Implementación de CI/CD con GitHub Actions** 🤖
 
 ---
-## Tecnologías Utilizadas
+## 🛠 Tecnologías Utilizadas
 
 El desarrollo del proyecto se basó en diversas tecnologías para garantizar su correcto funcionamiento:
 
@@ -73,14 +73,14 @@ El desarrollo del proyecto se basó en diversas tecnologías para garantizar su 
 
    ✅ Todas las pruebas pasaron exitosamente.
 
-1. **Preprocesamiento de los datos:** 
+**Preprocesamiento de los datos:** 
     - Se ajustaron los datos de entrada para cumplir con los requisitos del modelo.
     - Problemas encontrados: errores en la limpieza de datos y formatos incorrectos de fechas.
 
-2. **Entrenamiento del modelo:** 
+**Entrenamiento del modelo:** 
     - Se probaron varios modelos, seleccionando finalmente **XGBoost**, ya que presentó el mejor balance entre precisión y sensibilidad en la predicción de atrasos.
 
-3. **Evaluación del modelo:** 
+**Evaluación del modelo:** 
     - La métrica más relevante para el negocio se definió como **recall**, para minimizar los falsos negativos.
 
 **Principales dificultades:**
@@ -92,61 +92,9 @@ El desarrollo del proyecto se basó en diversas tecnologías para garantizar su 
 ## 🌐 Parte 2: Implementación de la API con FastAPI
 
 ### ✔️ Actividades realizadas
-# Documentación del Proyecto de Predicción de Atrasos de Vuelos - LATAM Airlines
 
-## Introducción
 
-Este proyecto tiene como objetivo desarrollar, probar y desplegar un modelo de predicción de atrasos de vuelos para LATAM Airlines, utilizando diversas herramientas y servicios en la nube para garantizar su escalabilidad y operatividad. A través del desarrollo de la API, pruebas de carga y su despliegue en Google Cloud Platform (GCP), se busca proporcionar una solución robusta y eficiente para predecir posibles retrasos en los vuelos, facilitando la toma de decisiones operativas.
-
----
-
-## Tecnologías Utilizadas
-
-El desarrollo del proyecto se basó en diversas tecnologías para garantizar su correcto funcionamiento:
-
-- **Lenguajes de programación:**
-  - Python 3.11
-  - Jupyter Notebooks
-
-- **Frameworks y librerías:**
-  - FastAPI (para la construcción de la API)
-  - Pytest (para las pruebas unitarias y de integración)
-  - Locust (para pruebas de carga)
-  - Pandas, NumPy, Scikit-learn, XGBoost (para procesamiento y entrenamiento del modelo)
-
-- **Herramientas de DevOps y CI/CD:**
-  - GitHub Actions (para integración y despliegue continuo)
-  - Docker (contenedorización de la aplicación)
-  - Google Cloud Platform (GCP):
-    - Cloud Run (despliegue de la API)
-    - Cloud Storage (almacenamiento de artefactos del modelo)
-    - Artifact Registry (almacenamiento de imágenes de Docker)
-
----
-
-## Descripción del Proyecto
-
-El proyecto se dividió en varias partes clave:
-
-### **Parte 1: Desarrollo del Modelo de Predicción**
-
-1. **Preprocesamiento de los datos:** 
-    - Se ajustaron los datos de entrada para cumplir con los requisitos del modelo.
-    - Problemas encontrados: errores en la limpieza de datos y formatos incorrectos de fechas.
-
-2. **Entrenamiento del modelo:** 
-    - Se probaron varios modelos, seleccionando finalmente **XGBoost**, ya que presentó el mejor balance entre precisión y sensibilidad en la predicción de atrasos.
-
-3. **Evaluación del modelo:** 
-    - La métrica más relevante para el negocio se definió como **recall**, para minimizar los falsos negativos.
-
-**Principales dificultades:**
-- Problemas de sintaxis en los gráficos de Jupyter Notebooks que se corrigieron manualmente.
-- Ajuste de hiperparámetros para mejorar la precisión sin comprometer el rendimiento.
-
----
-
-### **Parte 2: Construcción de la API con FastAPI**
+### Construcción de la API con FastAPI**
 
 Se implementó una API REST utilizando FastAPI que incluye los siguientes endpoints:
 
