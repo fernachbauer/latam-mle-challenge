@@ -1,0 +1,12 @@
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Configuración de entornos virtuales
+venv/
+env/
+
+# Archivos de configuración locales
+.gcloud/
+gcp-key.json
