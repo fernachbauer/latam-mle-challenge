@@ -3,31 +3,41 @@
 ¡Hola equipo! 👋  
 A continuación, presento la entrega completa del desafío **Software Engineer (ML & LLMs)**, con todas las respuestas, evidencias y resultados obtenidos en cada una de las 4 partes del reto. 🎯
 
+## 👤​ Información General
+
+**Participante:** Fernando Nachbauer
+
+**Correo:** fernachbauer@gmail.com
+
+**Repositorio GitHub:** latam-mle-challenge
+
+**URL de la API desplegada:** [latam-api](https://latam-api-700756977721.us-central1.run.app/health)
+
 ---
 
 ## 📝 Índice
 
 1. [Resumen del Desafío](#resumen-del-desafío)
-2. [Parte 1: Transcripción del modelo](#parte-1-transcripción-del-modelo)
-3. [Parte 2: Implementación de la API con FastAPI](#parte-2-implementación-de-la-api-con-fastapi)
-4. [Parte 3: Despliegue en Google Cloud](#parte-3-despliegue-en-google-cloud)
-5. [Parte 4: Implementación CI/CD](#parte-4-implementación-cicd)
-6. [Conclusión](#conclusión)
-7. [Evidencias](#evidencias)
+2. [Evidencia del proyecto](#Evidencia-del-proyecto)
+3. [Parte 1: Transcripción del modelo](#parte-1-transcripción-del-modelo)
+4. [Parte 2: Implementación de la API con FastAPI](#parte-2-implementación-de-la-api-con-fastapi)
+5. [Parte 3: Despliegue en Google Cloud](#parte-3-despliegue-en-google-cloud)
+6. [Parte 4: Implementación CI/CD](#parte-4-implementación-cicd)
+7. [Conclusión](#conclusión)
 
 ---
 
-## 🛠 Resumen del Desafío
+## 🛠 1. Resumen del Desafío
 
-En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning para predecir la probabilidad de **retraso de vuelos en el aeropuerto de SCL**. Se llevaron a cabo las siguientes etapas:
+En este desafío, el objetivo fue operacionalizar un modelo de Machine Learning para predecir la probabilidad de **retraso de vuelos en el aeropuerto de SCL** mediante una API en FastAPI, con despliegue en Google Cloud Run y un flujo de CI/CD en GitHub Actions. Se llevaron a cabo las siguientes etapas:
 
-1. **Transcripción del modelo de Jupyter Notebook a Python** 🐍
-2. **Desarrollo de una API con FastAPI** ⚡
-3. **Despliegue de la API en Google Cloud Run** ☁️
-4. **Implementación de CI/CD con GitHub Actions** 🤖
+A. **Transcripción del modelo de Jupyter Notebook a un script Python (model.py)** 🐍
+B. **Desarrollo de una API REST con FastAPI** ⚡
+C. **Despliegue de la API en Google Cloud Run** ☁️
+D. **Implementación de CI/CD con GitHub Actions** 🤖
 
 ---
-## 🛠 Tecnologías Utilizadas
+### 🛠 1.1 Tecnologías Utilizadas
 
 El desarrollo del proyecto se basó en diversas tecnologías para garantizar su correcto funcionamiento:
 
@@ -49,6 +59,155 @@ El desarrollo del proyecto se basó en diversas tecnologías para garantizar su 
     - Cloud Storage (almacenamiento de artefactos del modelo)
     - Artifact Registry (almacenamiento de imágenes de Docker)
 
+---
+
+## 2. 📸 Evidencias del proyecto
+
+---
+
+### **2.1 Validación del estado del repositorio**
+```bash
+git status
+git log --oneline -n 5
+```
+📌 **Evidencia esperada:**
+- Estado del repositorio (`git status`)
+- Últimos 5 commits (`git log`)
+
+<img width="588" alt="Captura de pantalla 2025-03-03 a la(s) 10 19 17" src="https://github.com/user-attachments/assets/49a61155-1ad1-45b9-8391-ec4beaf4116d" />
+
+
+---
+
+### ** 2.2 Prueba de la API en Cloud Run**
+
+#### **2.2.1 Verificación que la API está en ejecución**
+```bash
+gcloud run services list
+```
+📌 **Evidencia esperada:**
+- Listado de servicios en Google Cloud Run
+
+<img width="674" alt="Captura de pantalla 2025-03-03 a la(s) 10 34 24" src="https://github.com/user-attachments/assets/d69571e0-4fa2-45bb-ac45-ce773292b3a5" />
+
+- La URL del servicio en ejecución: https://latam-api-700756977721.us-central1.run.app
+
+
+#### **2.2.2 Prueba de salud del servicio (`/health`)**
+```bash
+curl -X GET "https://latam-api-700756977721.us-central1.run.app/health"
+```
+📌 **Evidencia esperada:**
+```json
+{"status":"OK"}
+```
+<img width="926" alt="Captura de pantalla 2025-03-03 a la(s) 10 38 37" src="https://github.com/user-attachments/assets/a5b2ae2d-3209-4cb8-9e6d-0247103c6d0a" />
+
+#### **2.2.3 Prueba de predicción (`/predict`)**
+```bash
+curl -X POST "https://latam-api-700756977721.us-central1.run.app/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "flights": [
+               {
+                   "OPERA": "LATAM",
+                   "TIPOVUELO": "N",
+                   "MES": 5,
+                   "Fecha-I": "2025-05-10 18:00:00",
+                   "Fecha-O": "2025-05-10 19:30:00",
+                   "SIGLAORI": "SCL",
+                   "SIGLADES": "MIA",
+                   "DIANOM": "Viernes",
+                   "Vlo-I": "LA800",
+                   "Emp-I": "LA"
+               }
+           ]
+       }'
+```
+📌 **Evidencia esperada:**
+```json
+{"predict":[0]}
+```
+<img width="953" alt="Captura de pantalla 2025-03-03 a la(s) 10 47 11" src="https://github.com/user-attachments/assets/fca88bdb-2d83-4cd4-b3b2-02e1f478c478" />
+
+---
+
+### **2.3 Validación de los contenedores y las imágenes Docker**
+#### **2.3.1 Verificar las imágenes en Google Container Registry**
+```bash
+gcloud container images list
+```
+📌 **Evidencia esperada:**
+- Listado de imágenes en GCR
+
+<img width="823" alt="Captura de pantalla 2025-03-03 a la(s) 10 49 07" src="https://github.com/user-attachments/assets/1edb532a-81e6-4e17-8b6b-6a81036b0428" />
+
+
+### **2.4 Validación del flujo de CI/CD en GitHub Actions**
+```bash
+curl -s https://api.github.com/repos/fernachbauer/latam-mle-challenge/actions/runs | jq '.workflow_runs[] | {name: .name, status: .status, conclusion: .conclusion, created_at: .created_at}' | head -n 20
+```
+📌 **Evidencia esperada:**
+- Estado de los workflows en GitHub Actions
+
+<img width="1337" alt="Captura de pantalla 2025-03-03 a la(s) 10 54 54" src="https://github.com/user-attachments/assets/c5aced13-79af-4d03-9b3e-a3f2cc3dd0e3" />
+
+Tambien se puede revisar manualmente en [GitHub Actions](https://github.com/fernachbauer/latam-mle-challenge/actions).
+
+---
+
+### **2.5 Ejecución de pruebas unitarias**
+```bash
+pytest tests/api/test_api.py
+pytest tests/model/test_model.py
+```
+📌 **Evidencia esperada:**
+- Pruebas exitosas con `pytest`
+
+<img width="1417" alt="Captura de pantalla 2025-03-03 a la(s) 10 58 32" src="https://github.com/user-attachments/assets/489b9647-cfad-4bd1-a1b3-7eead3d6da05" />
+
+<img width="1415" alt="Captura de pantalla 2025-03-03 a la(s) 11 01 42" src="https://github.com/user-attachments/assets/ca73a72a-a9c6-43d2-8c8e-0dc875840b3c" />
+
+
+---
+
+### **2.6 Envío del proyecto**
+```bash
+curl -X POST https://advana-challenge-check-api-cr-k4hdbggvoq-uc.a.run.app/software-engineer \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "Fernando Nachbauer",
+           "mail": "fernachbauer@gmail.com",
+           "github_url": "https://github.com/fernachbauer/latam-mle-challenge.git",
+           "api_url": "https://latam-api-700756977721.us-central1.run.app"
+         }'
+```
+📌 **Evidencia esperada:**
+```json
+{
+  "status": "OK",
+  "detail": "your request was received"
+}
+```
+<img width="570" alt="Captura de pantalla 2025-03-02 a la(s) 20 15 02" src="https://github.com/user-attachments/assets/24d48ac0-fe60-4473-9193-7794db5bc4dd" />
+
+---
+
+### **2.8 Lista de documentación adjunta de los resultados**
+
+Se adjuntaton las capturas de pantalla de cada paso y se agregaron al documento de entrega.
+
+📌 **Checklist de Evidencias:**
+✅ `git status` y `git log`  
+✅ `gcloud run services list`  
+✅ `curl -X GET` `/health`  
+✅ `curl -X POST` `/predict`  
+✅ `gcloud container images list`   
+✅ `pytest` para API y modelo  
+✅ `curl -X POST` para enviar el challenge  
+
+---
+# Desarrollo del Proyecto
 ---
 
 ## 📊 Parte 1: Transcripción del modelo
@@ -214,7 +373,34 @@ Identificación de latencias inesperadas debido a la carga del servidor.
 
    **Resultado esperado:** ✅ API funcionando correctamente bajo carga.
    
-![image](https://github.com/user-attachments/assets/32dca277-4493-4dcc-bcaf-69c32b9010af)
+
+<img width="943" alt="Captura de pantalla 2025-03-03 a la(s) 11 32 12" src="https://github.com/user-attachments/assets/6f2c18fc-1456-47db-a171-565e39c45ef4" />
+
+La prueba de estrés con **Locust** se ejecutó correctamente. Aquí están los principales resultados como evidencia:
+
+---
+
+### 📊 **Resultados del Test de Estrés**
+**Configuración del test:**
+- **URL del servicio:** [latam-api-700756977721.us-central1.run.app](https://latam-api-700756977721.us-central1.run.app)
+- **Duración:** 60 segundos
+- **Usuarios simultáneos:** 100
+- **Frecuencia de generación de usuarios:** 1 usuario por segundo
+- **Tipo de solicitud:** `POST /predict`
+- **Número total de peticiones:** `2,278`
+- **Errores:** `0 (0.00%)`
+- **Latencia promedio:** `741ms`
+- **Latencia mínima:** `59ms`
+- **Latencia máxima:** `11,000ms`
+- **Percentiles de respuesta:**
+  - **50% (mediana):** `560ms`
+  - **75%:** `1,100ms`
+  - **90%:** `1,700ms`
+  - **99.9%:** `9,000ms`
+
+
+### ✅ **Conclusión**
+El API **latam-api** maneja correctamente 100 usuarios concurrentes con más de **2,200 requests** en un minuto sin fallos. Sin embargo, hay algunas latencias altas en percentiles altos (p99.9 > 9s), lo que indica que podría haber optimizaciones en infraestructura o código.
 
 ---
 
@@ -237,17 +423,6 @@ Identificación de latencias inesperadas debido a la carga del servidor.
    Después de realizar un push, los workflows fueron activados automáticamente en GitHub Actions.
 
 ---
-
-## 📸 Evidencias
-
-### 🏁 Pruebas unitarias incorporadas al flujo (Parte 1 y 2)
-![Pruebas Unitarias](https://github.com/fernachbauer/latam-mle-challenge/actions/workflows/ci.yml)
-
-### ☁️ Despliegue en Google Cloud Run (Parte 3)
-![Despliegue Cloud Run](https://github.com/fernachbauer/latam-mle-challenge/actions/workflows/cd.yml)
-
-### ✅ API funcionando en producción
-https://latam-api-700756977721.us-central1.run.
 
 ## **Principales desafíos:**
 
@@ -322,7 +497,6 @@ Pruebas adicionales
 
 Se recomienda utilizar herramientas como Postman para realizar pruebas adicionales, o incluir el script de prueba automatizado en el flujo de CI/CD para verificar la disponibilidad y precisión de la API.
 
-Puedes agregar este apartado al documento para proporcionar instrucciones claras sobre el consumo de la API y facilitar su uso a otros desarrolladores o testers.
 
 ## 🏁 Conclusines.
 
@@ -372,23 +546,16 @@ Además, este ejercicio ha resaltado la importancia de la **colaboración y la c
 
 Finalmente, el desafío refuerza la idea de que el rol del Ingeniero de Machine Learning no termina cuando el modelo está entrenado, sino que apenas comienza. La **capacidad de desplegar, monitorear y mejorar continuamente el modelo** en respuesta a cambios en los datos y las necesidades del negocio es lo que realmente diferencia a un profesional experimentado en el campo. Este tipo de retos proporcionan una **comprensión holística del proceso de producción de modelos de Machine Learning**, preparando al ingeniero para enfrentar escenarios complejos del mundo real con confianza y eficiencia.
 
-## 🚀 Envío del desafío
+---
 
-Se realizó el envío de la solución mediante la siguiente petición POST:
+¡Gracias por la oportunidad de participar en este desafío! 🎉 
 
-```bash
-curl -X POST https://advana-challenge-check-api-cr-k4hdbggvoq-uc.a.run.app/software-engineer \
-     -H "Content-Type: application/json" \
-     -d '{
-           "name": "Fernando Nachbauer",
-           "mail": "fernachbauer@gmail.com",
-           "github_url": "https://github.com/fernachbauer/latam-mle-challenge.git",
-           "api_url": "https://latam-api-700756977721.us-central1.run.app"
-         }'
-```
+Si tienen alguna pregunta, estaré encantado de responder. 🤓
+
+**¡ Nos vemos en las nubes!**
 
 
-¡Gracias por la oportunidad de participar en este desafío! 🎉 Si tienen alguna pregunta, estaré encantado de responder. 🤓
-¡ Nos vemos en las nubes!
        __|__
 --@--@--(_)--@--@--
+
+
